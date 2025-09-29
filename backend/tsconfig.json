@@ -1,0 +1,26 @@
+{
+  // Visit https://aka.ms/tsconfig to read more about this file
+  "compilerOptions": {
+    // File Layout
+    // "rootDir": "./src",
+    // "outDir": "./dist",
+
+    // Environment Settings
+    // See also https://aka.ms/tsconfig/module
+    "module": "CommonJS", // CAMBIAR DE "nodenext" A "CommonJS"
+    "target": "ES2020", // CAMBIAR DE "esnext" A "ES2020" (más estable)
+
+    // ESTO ES CLAVE PARA USAR 'import express from "express"'
+    "esModuleInterop": true, 
+    
+    // DESCOMENTAR ESTAS LÍNEAS PARA EL ENTORNO DE NODE
+    "lib": ["es2020"],
+    "types": ["node", "express"], // Asegura que los tipos de Node y Express sean reconocidos
+    "moduleResolution": "node", // Asegura que TypeScript busque módulos correctamente
+    
+    // ... Otras opciones ...
+
+    "strict": true,
+    "skipLibCheck": true,
+  }
+}

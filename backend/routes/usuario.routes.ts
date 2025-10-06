@@ -1,8 +1,14 @@
-import express from 'express';
-import { listarUsuarios } from '../controllers/usuario.controller';
+import { Router } from 'express';
+import {
+  obtenerUsuarios,
+  crearUsuario,
+  editarUsuario,
+} from '../controllers/usuario.controller';
 
-const router = express.Router();
+const router = Router();
 
-router.get('/', listarUsuarios);
+router.get('/', obtenerUsuarios);
+router.post('/', crearUsuario);
+router.put('/:id', editarUsuario);
 
 export default router;

@@ -1,15 +1,25 @@
 import { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
-
+import jwt from 'jsonwebtoken';
 
 const prisma = new PrismaClient();
 
 export const registrarUsuario = async (req: Request, res: Response) => {
-  const { nombre, apellido, correo, password, confirmarPassword } = req.body;
+  const {
+    nombre,
+    apellido,
+    correo,
+    password,
+    confirmarPassword,
+    edad,
+    ci,
+    paisId,
+    generoId,
+  } = req.body;
 
   // Validaciones básicas
-  if (!nombre || !apellido || !correo || !password || !confirmarPassword) {
+  if (!nombre || !apellido || !correo || !password || !confirmarPassword || !edad || !ci || !paisId || !generoId) {
     return res.status(400).json({ error: 'Todos los campos son obligatorios.' });
   }
 
@@ -22,25 +32,32 @@ export const registrarUsuario = async (req: Request, res: Response) => {
   }
 
   try {
-    // Verificar si el correo ya está registrado
-    const usuarioExistente = await prisma.usuario.findUnique({
-      where: { correo },
-    });
+    // Verificar si ya existe un usuario con ese correo o ci
+    const [correoExistente, ciExistente] = await Promise.all([
+      prisma.usuario.findUnique({ where: { correo } }),
+      prisma.usuario.findUnique({ where: { ci } }),
+    ]);
 
-    if (usuarioExistente) {
+    if (correoExistente) {
       return res.status(400).json({ error: 'El correo ya está registrado.' });
     }
 
-    // Encriptar contraseña
+    if (ciExistente) {
+      return res.status(400).json({ error: 'La cédula de identidad ya está registrada.' });
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Crear usuario
     await prisma.usuario.create({
       data: {
         nombre,
         apellido,
         correo,
         password: hashedPassword,
+        edad: Number(edad),
+        ci,
+        paisId: Number(paisId),
+        generoId: Number(generoId),
       },
     });
 

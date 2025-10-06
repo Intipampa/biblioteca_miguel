@@ -8,17 +8,37 @@ datasource db {
 }
 
 model Libro {
-  id        Int    @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   titulo    String
   autor     String
   creadoEn  DateTime @default(now())
 }
 
 model Usuario {
-  id        Int     @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   nombre    String
   apellido  String
-  correo    String  @unique
+  correo    String   @unique
   password  String
+  edad      Int?     // ahora opcional
+  ci        String?  @unique // ahora opcional
+  paisId    Int?     // ahora opcional
+  generoId  Int?     // ahora opcional
   creadoEn  DateTime @default(now())
+
+  pais      Pais?    @relation(fields: [paisId], references: [id])
+  genero    Genero?  @relation(fields: [generoId], references: [id])
+}
+
+
+model Pais {
+  id       Int       @id @default(autoincrement())
+  nombre   String    @unique
+  usuarios Usuario[]
+}
+
+model Genero {
+  id       Int       @id @default(autoincrement())
+  nombre   String    @unique
+  usuarios Usuario[]
 }

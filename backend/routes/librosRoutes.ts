@@ -1,8 +1,8 @@
 import express from 'express';
-import { obtenerLibros } from '../controllers/librosController'; // Importas la función
+import { obtenerLibros } from '../controllers/librosController'; 
 
 const router = express.Router();
 
-router.get('/libros', obtenerLibros); // Si hacen GET a /api/libros -> llama a obtenerLibros
+router.get('/libros', obtenerLibros);
 
 export default router;
